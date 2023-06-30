@@ -1,73 +1,50 @@
 package com.example.sample_analytics.controller;
 
-import com.example.sample_analytics.domain.Transaction;
-import com.example.sample_analytics.repository.TransactionRepository;
-import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.sample_analytics.dto.filter.TransactionFilter;
+import com.example.sample_analytics.entity.Transaction;
+import com.example.sample_analytics.exception.ResourceNotFoundException;
+import com.example.sample_analytics.service.TransactionService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
-import java.net.URI;
-import java.util.Optional;
 
 @RestController
 public class TransactionController {
-    @Autowired
-    private TransactionRepository transactionRepository;
 
-    // Return all transactions
-    @GetMapping("/transactions")
-    public ResponseEntity<?> getAllTransactions(Pageable pageable) {
-        Page<Transaction> transactions = transactionRepository.findAll(pageable);
+    private final TransactionService transactionService;
 
-        return new ResponseEntity<>(transactions, HttpStatus.OK);
+    public TransactionController(TransactionService transactionService) {
+        this.transactionService = transactionService;
     }
 
-    // Return a transaction by id
     @GetMapping("/transactions/{id}")
-    public ResponseEntity<?> getTransactionById(@PathVariable String id) {
-        Optional<Transaction> transaction = transactionRepository.findById(id);
+    public ResponseEntity<?> getTransactionById(@PathVariable String id) throws ResourceNotFoundException {
+        Transaction transaction = transactionService.getTransactionById(id);
 
         return new ResponseEntity<>(transaction, HttpStatus.OK);
     }
 
-    // Create a transaction
+    @GetMapping("/transactions")
+    public ResponseEntity<?> getTransactionList(TransactionFilter filter, Pageable pageable) throws ResourceNotFoundException {
+        Page<Transaction> transactionPage = transactionService.getTransactionList(filter, pageable);
+
+        return new ResponseEntity<>(transactionPage, HttpStatus.OK);
+    }
+
     @PostMapping("/transactions")
-    public ResponseEntity<?> createTransaction(@RequestBody @Valid Transaction transaction) {
-        transactionRepository.save(transaction);
+    public ResponseEntity<?> createTransaction(@RequestBody Transaction transaction) {
+        Transaction newTransaction = transactionService.createTransaction(transaction);
 
-        HttpHeaders responseHeaders = new HttpHeaders();
-
-        URI newTransactionUri = ServletUriComponentsBuilder
-                .fromCurrentRequest()
-                .path("/{id}")
-                .buildAndExpand(transaction.getId())
-                .toUri();
-
-        responseHeaders.setLocation(newTransactionUri);
-
-        return new ResponseEntity<>(null, responseHeaders, HttpStatus.CREATED);
+        return new ResponseEntity<>(newTransaction, HttpStatus.CREATED);
     }
 
-    // Update a transaction by id
     @PutMapping("/transactions/{id}")
-    public ResponseEntity<?> updateTransactionById(@PathVariable String id, @RequestBody @Valid Transaction transaction) {
-        transactionRepository.save(transaction);
+    public ResponseEntity<?> updateTransaction(@RequestBody Transaction transaction, @PathVariable String id) throws ResourceNotFoundException {
+        Transaction newTransaction = transactionService.updateTransaction(transaction);
 
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    // Delete a transaction by id
-    @DeleteMapping("/transactions/{id}")
-    public ResponseEntity<?> deleteTransactionById(@PathVariable String id) {
-        transactionRepository.deleteById(id);
-
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(newTransaction, HttpStatus.OK);
     }
 
 }

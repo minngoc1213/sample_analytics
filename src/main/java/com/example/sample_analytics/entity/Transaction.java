@@ -1,25 +1,26 @@
-package com.example.sample_analytics.domain;
+package com.example.sample_analytics.entity;
 
 import jakarta.validation.constraints.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.Field;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
+
+import static com.example.sample_analytics.constant.Constant.ID_REGEX;
+import static com.example.sample_analytics.constant.Constant.STRING_MAX_LENGTH;
 
 @Document(collection = "transactions")
 public class Transaction {
     @Id
-    @Pattern(regexp = "^[a-z0-9]*$")
+    @Pattern(regexp = ID_REGEX)
     private String id;
 
     @NotNull
     @Positive
     private Integer account_id;
 
-    @NotNull
     @PositiveOrZero
     private Integer transaction_count;
 
@@ -27,10 +28,9 @@ public class Transaction {
 
     private Date bucket_end_date;
 
-    @Field("transactions")
-    private List<transactions> transactionsList = new ArrayList<>();
+    private Set<Transactions> transactions = new HashSet<>();
 
-    public static class transactions {
+    public static class Transactions {
         @NotNull
         @Past
         private Date date;
@@ -40,8 +40,10 @@ public class Transaction {
         private Integer amount;
 
         @NotNull
+        @Size(max = STRING_MAX_LENGTH)
         private String transaction_code;
 
+        @Size(max = STRING_MAX_LENGTH)
         private String symbol;
 
         @NotNull
@@ -52,7 +54,7 @@ public class Transaction {
         @Positive
         private Double total;
 
-        public transactions(@NotNull Date date, @NotNull Integer amount, @NotNull String transaction_code, String symbol, @NotNull Double price, @NotNull Double total) {
+        public Transactions(@NotNull Date date, @NotNull Integer amount, @NotNull String transaction_code, String symbol, @NotNull Double price, @NotNull Double total) {
             this.date = date;
             this.amount = amount;
             this.transaction_code = transaction_code;
@@ -110,13 +112,13 @@ public class Transaction {
         }
     }
 
-    public Transaction(String id, @NotNull Integer account_id, @NotNull Integer transaction_count, Date bucket_start_date, Date bucket_end_date, List<transactions> transactionsList) {
+    public Transaction(String id, @NotNull Integer account_id, @NotNull Integer transaction_count, Date bucket_start_date, Date bucket_end_date, Set<Transactions> transactions) {
         this.id = id;
         this.account_id = account_id;
         this.transaction_count = transaction_count;
         this.bucket_start_date = bucket_start_date;
         this.bucket_end_date = bucket_end_date;
-        this.transactionsList = transactionsList;
+        this.transactions = transactions;
     }
 
     public String getId() {
@@ -159,11 +161,11 @@ public class Transaction {
         this.bucket_end_date = bucket_end_date;
     }
 
-    public List<transactions> getTransactionsList() {
-        return transactionsList;
+    public Set<Transactions> getTransactions() {
+        return transactions;
     }
 
-    public void setTransactionsList(List<transactions> transactionsList) {
-        this.transactionsList = transactionsList;
+    public void setTransactions(Set<Transactions> transactions) {
+        this.transactions = transactions;
     }
 }

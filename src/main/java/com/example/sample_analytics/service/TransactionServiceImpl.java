@@ -1,16 +1,17 @@
 package com.example.sample_analytics.service;
 
+import com.example.sample_analytics.common.exception.ResourceNotFoundException;
 import com.example.sample_analytics.dto.filter.TransactionFilter;
+import com.example.sample_analytics.dto.mapper.TransactionMapper;
 import com.example.sample_analytics.entity.Transaction;
-import com.example.sample_analytics.exception.ResourceNotFoundException;
 import com.example.sample_analytics.repository.TransactionRepository;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class TransactionServiceImpl implements TransactionService {
-
     private final TransactionRepository transactionRepository;
 
     public TransactionServiceImpl(TransactionRepository transactionRepository) {
@@ -28,8 +29,8 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public Page<Transaction> getTransactionList(TransactionFilter filter, Pageable pageable) throws ResourceNotFoundException {
-        return transactionRepository.getTransactionList(filter, pageable);
+    public List<Transaction> getTransactionList(TransactionFilter filter) throws ResourceNotFoundException {
+        return transactionRepository.getTransactionList(filter);
     }
 
     @Override

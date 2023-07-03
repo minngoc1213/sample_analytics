@@ -8,8 +8,8 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-import static com.example.sample_analytics.constant.Constant.ID_REGEX;
-import static com.example.sample_analytics.constant.Constant.STRING_MAX_LENGTH;
+import static com.example.sample_analytics.common.constant.Constant.ID_REGEX;
+import static com.example.sample_analytics.common.constant.Constant.STRING_MAX_LENGTH;
 
 @Document(collection = "transactions")
 public class Transaction {

@@ -1,10 +1,10 @@
-//package com.example.sample_analytics.repository;
-//
-//import com.example.sample_analytics.entity.Customer;
-//import org.springframework.data.mongodb.repository.MongoRepository;
-//import org.springframework.stereotype.Repository;
-//
-//@Repository
-//public interface CustomerRepository extends MongoRepository<Customer, String>, CustomizedCustomerRepository {
-//
-//}
+package com.example.sample_analytics.repository;
+
+import com.example.sample_analytics.entity.Customer;
+import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface CustomerRepository extends MongoRepository<Customer, String>, CustomizedCustomerRepository {
+
+}

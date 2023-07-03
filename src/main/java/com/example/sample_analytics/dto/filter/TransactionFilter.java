@@ -1,9 +1,6 @@
 package com.example.sample_analytics.dto.filter;
 
-import org.springframework.data.mongodb.core.aggregation.ArrayOperators;
-
 public class TransactionFilter {
-
     private Integer transaction_count = null;
 
     public TransactionFilter() {

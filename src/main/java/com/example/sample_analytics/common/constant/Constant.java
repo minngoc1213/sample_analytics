@@ -1,4 +1,4 @@
-package com.example.sample_analytics.constant;
+package com.example.sample_analytics.common.constant;
 
 public final class Constant {
     private Constant() {

@@ -1,21 +1,20 @@
 package com.example.sample_analytics.dto.filter;
 
 public class CustomerFilter {
-     private String name = null;
+    private String name = null;
 
-     private String address = null;
+    private String address = null;
 
-     private String active = null;
+    private String active = null;
 
-     public CustomerFilter() {
+    public CustomerFilter() {
+    }
 
-     }
-
-     public CustomerFilter(String name, String address, String active) {
-         this.name = name;
-         this.address = address;
-         this.active = active;
-     }
+    public CustomerFilter(String name, String address, String active) {
+        this.name = name;
+        this.address = address;
+        this.active = active;
+    }
 
     public String getName() {
         return name;

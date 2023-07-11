@@ -17,6 +17,9 @@ public class CustomerDTO {
 
     private Boolean active;
 
+    public CustomerDTO() {
+    }
+
     public CustomerDTO(String id, String username, String name, String address, Date birthdate, String email, Boolean active) {
         this.id = id;
         this.username = username;

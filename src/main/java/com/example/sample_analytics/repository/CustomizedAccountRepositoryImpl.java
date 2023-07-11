@@ -2,11 +2,13 @@ package com.example.sample_analytics.repository;
 
 import com.example.sample_analytics.dto.filter.AccountFilter;
 import com.example.sample_analytics.entity.Account;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Collation;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
@@ -17,15 +19,22 @@ import java.util.Set;
 import static java.util.Locale.ENGLISH;
 
 public class CustomizedAccountRepositoryImpl implements CustomizedAccountRepository {
+    private final MongoTemplate mongoTemplate;
 
-    @Autowired
-    private MongoTemplate mongoTemplate;
+    public CustomizedAccountRepositoryImpl(MongoTemplate mongoTemplate) {
+        this.mongoTemplate = mongoTemplate;
+    }
 
     @Override
-    public List<Account> getAccountList(AccountFilter filter) {
+    public Page<Account> getAccountList(AccountFilter filter, Pageable pageable) {
         Query query = buildAccountFilterQuery(filter);
+        query.with(pageable);
 
-        return this.mongoTemplate.find(query, Account.class);
+        return PageableExecutionUtils.getPage(
+                this.mongoTemplate.find(query, Account.class),
+                pageable,
+                () -> this.mongoTemplate.count(query.skip(0).limit(0), Account.class)
+        );
     }
 
     private Query buildAccountFilterQuery(AccountFilter filter) {

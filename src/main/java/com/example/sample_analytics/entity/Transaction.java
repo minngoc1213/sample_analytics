@@ -3,9 +3,11 @@ package com.example.sample_analytics.entity;
 import jakarta.validation.constraints.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 import static com.example.sample_analytics.common.constant.Constant.ID_REGEX;
@@ -19,16 +21,24 @@ public class Transaction {
 
     @NotNull
     @Positive
-    private Integer account_id;
+    @Field(name = "account_id")
+    private Integer accountId;
 
     @PositiveOrZero
-    private Integer transaction_count;
+    @Field(name = "transaction_count")
+    private Integer transactionCount;
 
-    private Date bucket_start_date;
+    @Field(name = "bucket_start_date")
+    private Date bucketStartDate;
 
-    private Date bucket_end_date;
+    @Field(name = "bucket_end_date")
+    private Date bucketEndDate;
 
     private Set<Transactions> transactions = new HashSet<>();
+
+    public Transaction() {
+        accountId = 0;
+    }
 
     public static class Transactions {
         @NotNull
@@ -39,9 +49,10 @@ public class Transaction {
         @Positive
         private Integer amount;
 
-        @NotNull
+        @NotBlank
         @Size(max = STRING_MAX_LENGTH)
-        private String transaction_code;
+        @Field(name = "transaction_code")
+        private String transactionCode;
 
         @Size(max = STRING_MAX_LENGTH)
         private String symbol;
@@ -54,37 +65,35 @@ public class Transaction {
         @Positive
         private Double total;
 
-        public Transactions(@NotNull Date date, @NotNull Integer amount, @NotNull String transaction_code, String symbol, @NotNull Double price, @NotNull Double total) {
-            this.date = date;
-            this.amount = amount;
-            this.transaction_code = transaction_code;
-            this.symbol = symbol;
-            this.price = price;
-            this.total = total;
+        public Transactions() {
+            date = new Date();
+            amount = 0;
+            total = 0.0;
+            price = 0.0;
         }
 
-        public Date getDate() {
+        public @NotNull Date getDate() {
             return date;
         }
 
-        public void setDate(Date date) {
+        public void setDate(@NotNull Date date) {
             this.date = date;
         }
 
-        public Integer getAmount() {
+        public @NotNull Integer getAmount() {
             return amount;
         }
 
-        public void setAmount(Integer amount) {
+        public void setAmount(@NotNull Integer amount) {
             this.amount = amount;
         }
 
-        public String getTransaction_code() {
-            return transaction_code;
+        public String getTransactionCode() {
+            return transactionCode;
         }
 
-        public void setTransaction_code(String transaction_code) {
-            this.transaction_code = transaction_code;
+        public void setTransactionCode(String transactionCode) {
+            this.transactionCode = transactionCode;
         }
 
         public String getSymbol() {
@@ -95,30 +104,21 @@ public class Transaction {
             this.symbol = symbol;
         }
 
-        public Double getPrice() {
+        public @NotNull Double getPrice() {
             return price;
         }
 
-        public void setPrice(Double price) {
+        public void setPrice(@NotNull Double price) {
             this.price = price;
         }
 
-        public Double getTotal() {
+        public @NotNull Double getTotal() {
             return total;
         }
 
-        public void setTotal(Double total) {
+        public void setTotal(@NotNull Double total) {
             this.total = total;
         }
-    }
-
-    public Transaction(String id, @NotNull Integer account_id, @NotNull Integer transaction_count, Date bucket_start_date, Date bucket_end_date, Set<Transactions> transactions) {
-        this.id = id;
-        this.account_id = account_id;
-        this.transaction_count = transaction_count;
-        this.bucket_start_date = bucket_start_date;
-        this.bucket_end_date = bucket_end_date;
-        this.transactions = transactions;
     }
 
     public String getId() {
@@ -129,36 +129,36 @@ public class Transaction {
         this.id = id;
     }
 
-    public Integer getAccount_id() {
-        return account_id;
+    public @NotNull Integer getAccountId() {
+        return accountId;
     }
 
-    public void setAccount_id(Integer account_id) {
-        this.account_id = account_id;
+    public void setAccountId(@NotNull Integer accountId) {
+        this.accountId = accountId;
     }
 
-    public Integer getTransaction_count() {
-        return transaction_count;
+    public Integer getTransactionCount() {
+        return transactionCount;
     }
 
-    public void setTransaction_count(Integer transaction_count) {
-        this.transaction_count = transaction_count;
+    public void setTransactionCount(Integer transactionCount) {
+        this.transactionCount = transactionCount;
     }
 
-    public Date getBucket_start_date() {
-        return bucket_start_date;
+    public Date getBucketStartDate() {
+        return bucketStartDate;
     }
 
-    public void setBucket_start_date(Date bucket_start_date) {
-        this.bucket_start_date = bucket_start_date;
+    public void setBucketStartDate(Date bucketStartDate) {
+        this.bucketStartDate = bucketStartDate;
     }
 
-    public Date getBucket_end_date() {
-        return bucket_end_date;
+    public Date getBucketEndDate() {
+        return bucketEndDate;
     }
 
-    public void setBucket_end_date(Date bucket_end_date) {
-        this.bucket_end_date = bucket_end_date;
+    public void setBucketEndDate(Date bucketEndDate) {
+        this.bucketEndDate = bucketEndDate;
     }
 
     public Set<Transactions> getTransactions() {
@@ -167,5 +167,22 @@ public class Transaction {
 
     public void setTransactions(Set<Transactions> transactions) {
         this.transactions = transactions;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Transaction)) {
+            return false;
+        }
+
+        return accountId.equals(((Transaction) o).accountId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(accountId);
     }
 }

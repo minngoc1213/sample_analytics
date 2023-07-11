@@ -2,13 +2,11 @@ package com.example.sample_analytics.service;
 
 import com.example.sample_analytics.common.exception.ResourceNotFoundException;
 import com.example.sample_analytics.dto.filter.TransactionFilter;
-import com.example.sample_analytics.dto.mapper.TransactionMapper;
 import com.example.sample_analytics.entity.Transaction;
 import com.example.sample_analytics.repository.TransactionRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class TransactionServiceImpl implements TransactionService {
@@ -29,8 +27,9 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public List<Transaction> getTransactionList(TransactionFilter filter) throws ResourceNotFoundException {
-        return transactionRepository.getTransactionList(filter);
+    public Page<Transaction> getTransactionList(TransactionFilter filter, Pageable pageable) {
+
+        return transactionRepository.getTransactionList(filter, pageable);
     }
 
     @Override
@@ -48,4 +47,13 @@ public class TransactionServiceImpl implements TransactionService {
         return transactionRepository.save(transaction);
     }
 
+    @Override
+    public void deleteTransaction(String id) throws ResourceNotFoundException {
+        Transaction transaction = transactionRepository.findById(id).orElse(null);
+        if (transaction == null) {
+            throw new ResourceNotFoundException("Transaction not found!");
+        }
+
+        transactionRepository.deleteById(id);
+    }
 }

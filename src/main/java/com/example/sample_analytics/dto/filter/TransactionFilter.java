@@ -1,21 +1,20 @@
 package com.example.sample_analytics.dto.filter;
 
 public class TransactionFilter {
-    private Integer transaction_count = null;
+    private Integer transactionCount = null;
 
     public TransactionFilter() {
-
     }
 
-    public TransactionFilter(Integer transaction_count) {
-        this.transaction_count = transaction_count;
+    public TransactionFilter(Integer transactionCount) {
+        this.transactionCount = transactionCount;
     }
 
-    public Integer getTransaction_count() {
-        return transaction_count;
+    public Integer getTransactionCount() {
+        return transactionCount;
     }
 
-    public void setTransaction_count(Integer transaction_count) {
-        this.transaction_count = transaction_count;
+    public void setTransactionCount(Integer transactionCount) {
+        this.transactionCount = transactionCount;
     }
 }

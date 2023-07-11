@@ -5,7 +5,10 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Positive;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
+import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 import static com.example.sample_analytics.common.constant.Constant.ID_REGEX;
@@ -18,18 +21,16 @@ public class Account {
 
     @NotNull
     @Positive
-    private Integer account_id;
+    @Field(name = "account_id")
+    private Integer accountId;
 
     @Positive
     private Integer limit;
 
-    private Set<String> products;
+    private Set<String> products = new HashSet<>();
 
-    public Account(String id, @NotNull Integer account_id, Integer limit, Set<String> products) {
-        this.id = id;
-        this.account_id = account_id;
-        this.limit = limit;
-        this.products = products;
+    public Account() {
+        accountId = 0;
     }
 
     public String getId() {
@@ -40,12 +41,12 @@ public class Account {
         this.id = id;
     }
 
-    public Integer getAccount_id() {
-        return account_id;
+    public @NotNull Integer getAccountId() {
+        return accountId;
     }
 
-    public void setAccount_id(Integer account_id) {
-        this.account_id = account_id;
+    public void setAccountId(@NotNull Integer accountId) {
+        this.accountId = accountId;
     }
 
     public Integer getLimit() {
@@ -62,5 +63,22 @@ public class Account {
 
     public void setProducts(Set<String> products) {
         this.products = products;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Account)) {
+            return false;
+        }
+
+        return accountId.equals(((Account) o).accountId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(accountId);
     }
 }

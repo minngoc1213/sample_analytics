@@ -2,10 +2,13 @@ package com.example.sample_analytics.repository;
 
 import com.example.sample_analytics.dto.filter.TransactionFilter;
 import com.example.sample_analytics.entity.Transaction;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Collation;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
@@ -21,10 +24,15 @@ public class CustomizedTransactionRepositoryImpl implements CustomizedTransactio
         this.mongoTemplate = mongoTemplate;
     }
 
-    public List<Transaction> getTransactionList(TransactionFilter filter) {
+    public Page<Transaction> getTransactionList(TransactionFilter filter, Pageable pageable) {
         Query query = buildTransactionFilterQuery(filter);
+        query.with(pageable);
 
-        return this.mongoTemplate.find(query, Transaction.class);
+        return PageableExecutionUtils.getPage(
+                this.mongoTemplate.find(query, Transaction.class),
+                pageable,
+                () -> this.mongoTemplate.count(query.skip(0).limit(0), Transaction.class)
+        );
     }
 
     private Query buildTransactionFilterQuery(TransactionFilter filter) {
@@ -36,10 +44,10 @@ public class CustomizedTransactionRepositoryImpl implements CustomizedTransactio
         }
 
         List<Criteria> criteriaList = new ArrayList<>();
-        Integer transaction_count = filter.getTransaction_count();
+        Integer transactionCount = filter.getTransactionCount();
 
-        if (!Objects.isNull(transaction_count)) {
-            criteriaList.add(Criteria.where("transaction_count").is(transaction_count));
+        if (!Objects.isNull(transactionCount)) {
+            criteriaList.add(Criteria.where("transactionCount").is(transactionCount));
         }
 
         if (!CollectionUtils.isEmpty(criteriaList)) {

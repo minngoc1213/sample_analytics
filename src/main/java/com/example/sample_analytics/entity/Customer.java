@@ -3,6 +3,7 @@ package com.example.sample_analytics.entity;
 import jakarta.validation.constraints.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.util.*;
 
@@ -15,7 +16,7 @@ public class Customer {
     @Pattern(regexp = ID_REGEX)
     private String id;
 
-    @NotNull
+    @NotBlank
     @Pattern(regexp = ID_REGEX)
     private String username;
 
@@ -33,29 +34,23 @@ public class Customer {
 
     private Boolean active;
 
-    private Set<Integer> accounts;
+    private Set<Integer> accounts = new HashSet<>();
 
-    private Map<String, TierAndDetails> tier_and_details;
+    @Field(name = "tier_and_details")
+    private Map<String, TierAndDetails> tierAndDetails = new HashMap<>();
 
     public static class TierAndDetails {
-        @NotNull
+        @NotBlank
         private String tier;
 
         @Size(max = STRING_MAX_LENGTH)
-        private Set<String> benefits;
+        private Set<String> benefits = new HashSet<>();
 
         private Boolean active;
 
-        @NotNull
+        @NotBlank
         @Pattern(regexp = ID_REGEX)
         private String id;
-
-        public TierAndDetails(@NotNull String tier, Set<String> benefits, Boolean active, @NotNull String id) {
-            this.tier = tier;
-            this.benefits = benefits;
-            this.active = active;
-            this.id = id;
-        }
 
         public String getTier() {
             return tier;
@@ -73,7 +68,7 @@ public class Customer {
             this.benefits = benefits;
         }
 
-        public Boolean isActive() {
+        public Boolean getActive() {
             return active;
         }
 
@@ -88,18 +83,6 @@ public class Customer {
         public void setId(String id) {
             this.id = id;
         }
-    }
-
-    public Customer(String id, @NotNull String username, String name, String address, Date birthdate, String email, Boolean active, Set<Integer> accounts, Map<String, TierAndDetails> tier_and_details) {
-        this.id = id;
-        this.username = username;
-        this.name = name;
-        this.address = address;
-        this.birthdate = birthdate;
-        this.email = email;
-        this.active = active;
-        this.accounts = accounts;
-        this.tier_and_details = tier_and_details;
     }
 
     public String getId() {
@@ -150,7 +133,7 @@ public class Customer {
         this.email = email;
     }
 
-    public Boolean isActive() {
+    public Boolean getActive() {
         return active;
     }
 
@@ -166,11 +149,28 @@ public class Customer {
         this.accounts = accounts;
     }
 
-    public Map<String, TierAndDetails> getTier_and_details() {
-        return tier_and_details;
+    public Map<String, TierAndDetails> getTierAndDetails() {
+        return tierAndDetails;
     }
 
-    public void setTier_and_details(Map<String, TierAndDetails> tier_and_details) {
-        this.tier_and_details = tier_and_details;
+    public void setTierAndDetails(Map<String, TierAndDetails> tierAndDetails) {
+        this.tierAndDetails = tierAndDetails;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Customer)) {
+            return false;
+        }
+
+        return username.equals(((Customer) o).username);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(username);
     }
 }

@@ -5,20 +5,23 @@ import java.util.Date;
 public class TransactionDTO {
     private String id;
 
-    private Integer account_id;
+    private Integer accountId;
 
-    private Integer transaction_count;
+    private Integer transactionCount;
 
-    private Date bucket_start_date;
+    private Date bucketStartDate;
 
-    private Date bucket_end_date;
+    private Date bucketEndDate;
 
-    public TransactionDTO(String id, Integer account_id, Integer transaction_count, Date bucket_start_date, Date bucket_end_date) {
+    public TransactionDTO() {
+    }
+
+    public TransactionDTO(String id, Integer accountId, Integer transactionCount, Date bucketStartDate, Date bucketEndDate) {
         this.id = id;
-        this.account_id = account_id;
-        this.transaction_count = transaction_count;
-        this.bucket_start_date = bucket_start_date;
-        this.bucket_end_date = bucket_end_date;
+        this.accountId = accountId;
+        this.transactionCount = transactionCount;
+        this.bucketStartDate = bucketStartDate;
+        this.bucketEndDate = bucketEndDate;
     }
 
     public String getId() {
@@ -29,35 +32,35 @@ public class TransactionDTO {
         this.id = id;
     }
 
-    public Integer getAccount_id() {
-        return account_id;
+    public Integer getAccountId() {
+        return accountId;
     }
 
-    public void setAccount_id(Integer account_id) {
-        this.account_id = account_id;
+    public void setAccountId(Integer accountId) {
+        this.accountId = accountId;
     }
 
-    public Integer getTransaction_count() {
-        return transaction_count;
+    public Integer getTransactionCount() {
+        return transactionCount;
     }
 
-    public void setTransaction_count(Integer transaction_count) {
-        this.transaction_count = transaction_count;
+    public void setTransactionCount(Integer transactionCount) {
+        this.transactionCount = transactionCount;
     }
 
-    public Date getBucket_start_date() {
-        return bucket_start_date;
+    public Date getBucketStartDate() {
+        return bucketStartDate;
     }
 
-    public void setBucket_start_date(Date bucket_start_date) {
-        this.bucket_start_date = bucket_start_date;
+    public void setBucketStartDate(Date bucketStartDate) {
+        this.bucketStartDate = bucketStartDate;
     }
 
-    public Date getBucket_end_date() {
-        return bucket_end_date;
+    public Date getBucketEndDate() {
+        return bucketEndDate;
     }
 
-    public void setBucket_end_date(Date bucket_end_date) {
-        this.bucket_end_date = bucket_end_date;
+    public void setBucketEndDate(Date bucketEndDate) {
+        this.bucketEndDate = bucketEndDate;
     }
 }

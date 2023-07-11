@@ -9,5 +9,4 @@ public final class Constant {
 
     public static final int STRING_MAX_LENGTH = 256;
 
-
 }

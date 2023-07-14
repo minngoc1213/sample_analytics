@@ -1,7 +1,7 @@
 package com.example.sample_analytics.entity;
 
+import com.example.sample_analytics.common.validator.DatabaseIdConstraint;
 import jakarta.validation.constraints.*;
-import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
@@ -10,13 +10,11 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-import static com.example.sample_analytics.common.constant.Constant.ID_REGEX;
 import static com.example.sample_analytics.common.constant.Constant.STRING_MAX_LENGTH;
 
 @Document(collection = "transactions")
 public class Transaction {
-    @Id
-    @Pattern(regexp = ID_REGEX)
+    @DatabaseIdConstraint
     private String id;
 
     @NotNull

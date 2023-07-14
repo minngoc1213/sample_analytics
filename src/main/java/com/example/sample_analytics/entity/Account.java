@@ -1,9 +1,9 @@
 package com.example.sample_analytics.entity;
 
+import com.example.sample_analytics.common.validator.DatabaseIdConstraint;
+import com.example.sample_analytics.common.validator.DatabaseStringListConstraint;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Positive;
-import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
@@ -11,12 +11,9 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-import static com.example.sample_analytics.common.constant.Constant.ID_REGEX;
-
 @Document(collection = "accounts")
 public class Account {
-    @Id
-    @Pattern(regexp = ID_REGEX)
+    @DatabaseIdConstraint
     private String id;
 
     @NotNull
@@ -27,6 +24,7 @@ public class Account {
     @Positive
     private Integer limit;
 
+    @DatabaseStringListConstraint
     private Set<String> products = new HashSet<>();
 
     public Account() {

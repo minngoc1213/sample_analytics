@@ -1,7 +1,9 @@
 package com.example.sample_analytics.entity;
 
+import com.example.sample_analytics.common.validator.DatabaseIdConstraint;
+import com.example.sample_analytics.common.validator.DatabaseIntegerListConstraint;
+import com.example.sample_analytics.common.validator.DatabaseStringListConstraint;
 import jakarta.validation.constraints.*;
-import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
@@ -12,8 +14,7 @@ import static com.example.sample_analytics.common.constant.Constant.STRING_MAX_L
 
 @Document(collection = "customers")
 public class Customer {
-    @Id
-    @Pattern(regexp = ID_REGEX)
+    @DatabaseIdConstraint
     private String id;
 
     @NotBlank
@@ -34,6 +35,7 @@ public class Customer {
 
     private Boolean active;
 
+    @DatabaseIntegerListConstraint
     private Set<Integer> accounts = new HashSet<>();
 
     @Field(name = "tier_and_details")
@@ -43,13 +45,12 @@ public class Customer {
         @NotBlank
         private String tier;
 
-        @Size(max = STRING_MAX_LENGTH)
+        @DatabaseStringListConstraint
         private Set<String> benefits = new HashSet<>();
 
         private Boolean active;
 
-        @NotBlank
-        @Pattern(regexp = ID_REGEX)
+        @DatabaseIdConstraint
         private String id;
 
         public String getTier() {

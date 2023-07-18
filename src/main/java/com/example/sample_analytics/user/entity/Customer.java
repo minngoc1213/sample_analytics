@@ -172,6 +172,6 @@ public class Customer {
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(username);
+        return getClass().hashCode();
     }
 }

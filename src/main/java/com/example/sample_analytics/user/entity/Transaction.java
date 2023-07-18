@@ -181,6 +181,6 @@ public class Transaction {
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(accountId);
+        return getClass().hashCode();
     }
 }

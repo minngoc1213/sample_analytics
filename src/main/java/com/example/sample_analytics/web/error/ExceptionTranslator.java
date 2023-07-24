@@ -20,5 +20,4 @@ public class ExceptionTranslator {
         return ResponseEntity.status(HttpStatus.OK).body(APIResponse.newFailureResponse(message));
     }
 
-
 }
